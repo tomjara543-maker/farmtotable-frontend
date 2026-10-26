@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f6f5f0;
+  --surface: #ffffff;
+  --surface-2: #efede6;
+  --line: #e2dfd5;
+  --fg: #1d1b16;
+  --muted: #6b675d;
+  --brand: #2f7d32;
+  --brand-strong: #22602a;
+  --brand-soft: #e4f1e1;
+  --on-brand: #ffffff;
+  --accent: #c2410c;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --warn: #8a5a00;
+  --warn-soft: #fff3d6;
+  --info: #0b6a96;
+  --info-soft: #e1f2fa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12140f;
+    --surface: #1b1e17;
+    --surface-2: #252920;
+    --line: #33382c;
+    --fg: #ecebe4;
+    --muted: #a3a194;
+    --brand: #6cc070;
+    --brand-strong: #8fd492;
+    --brand-soft: #1f3320;
+    --on-brand: #0d1a0e;
+    --accent: #fb923c;
+    --danger: #f38b80;
+    --danger-soft: #3a1d1a;
+    --warn: #f2c25b;
+    --warn-soft: #362a12;
+    --info: #6cc3ec;
+    --info-soft: #132b37;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-on-brand: var(--on-brand);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.input {
+  @apply w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-fg placeholder:text-muted focus:border-brand focus:ring-2 focus:ring-brand/25 focus:outline-none;
+}
+
+.label {
+  @apply block space-y-1 text-sm font-medium text-muted;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-on-brand transition-colors hover:bg-brand-strong disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-line px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-surface-2;
+}
+
+.card {
+  @apply rounded-2xl border border-line bg-surface p-5 shadow-sm;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap;
+}
+.badge-brand {
+  @apply bg-brand-soft text-brand;
+}
+.badge-warn {
+  @apply bg-warn-soft text-warn;
+}
+.badge-danger {
+  @apply bg-danger-soft text-danger;
+}
+.badge-info {
+  @apply bg-info-soft text-info;
+}
+.badge-muted {
+  @apply bg-surface-2 text-muted;
+}
+
+.alert-ok {
+  @apply rounded-xl bg-brand-soft p-3 text-sm text-brand;
+}
+.alert-error {
+  @apply rounded-xl bg-danger-soft p-3 text-sm text-danger;
+}
