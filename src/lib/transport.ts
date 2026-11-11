@@ -24,8 +24,9 @@ export async function request(path: string, init: RequestInit = {}): Promise<Raw
   try {
     res = await fetch(`${API_URL}${path}`, { ...init, headers });
   } catch {
-    throw new NetworkError("No se pudo conectar con el API Gateway. ¿Está levantado el backend?");
+    throw new NetworkError("No se pudo conectar con el servidor. Puede estar despertando o limitando peticiones; espera un momento y pulsa Actualizar.");
   }
+  if (res.status === 429) throw new NetworkError("Demasiadas peticiones seguidas. Espera un momento y pulsa Actualizar.");
   if (res.status === 204) return { status: 204, body: undefined };
   return { status: res.status, body: await res.json().catch(() => ({})) };
 }
