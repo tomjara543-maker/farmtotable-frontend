@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
-import DemoBanner from "@/components/DemoBanner";
-import Nav from "@/components/Nav";
+import { Fraunces, Geist } from "next/font/google";
+import SiteFrame from "@/components/SiteFrame";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -9,23 +8,22 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+});
+
 export const metadata: Metadata = {
-  title: "FarmToTable",
-  description: "Productos agrícolas directos del productor a tu mesa",
+  title: "FarmToTable · Frutas y verduras frescas a domicilio",
+  description: "Frutas y vegetales frescos de fincas locales, entregados directo en tu casa.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className={`${geistSans.variable} h-full antialiased`}>
+    <html lang="es" className={`${geistSans.variable} ${fraunces.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
-        <header className="sticky top-0 z-10 border-b border-line bg-surface/85 backdrop-blur">
-          <DemoBanner />
-          <Nav />
-        </header>
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
-        <footer className="border-t border-line py-6 text-center text-xs text-muted">
-          FarmToTable · Del campo a tu mesa, sin intermediarios
-        </footer>
+        <SiteFrame>{children}</SiteFrame>
       </body>
     </html>
   );

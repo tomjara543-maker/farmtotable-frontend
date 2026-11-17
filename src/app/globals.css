@@ -1,50 +1,67 @@
 @import "tailwindcss";
 
+/*
+ * Paleta FarmToTable (estricta). Solo se usan estos seis tonos y mezclas
+ * entre ellos (su escala tonal interna). Ver DESIGN.md.
+ *   #051F20 verde casi negro  · #0B2B26 verde muy oscuro · #163832 verde bosque
+ *   #235347 verde profundo    · #8EB69B verde salvia     · #DAF1DE verde menta claro
+ */
 :root {
-  --bg: #f6f5f0;
-  --surface: #ffffff;
-  --surface-2: #efede6;
-  --line: #e2dfd5;
-  --fg: #1d1b16;
-  --muted: #6b675d;
-  --brand: #2f7d32;
-  --brand-strong: #22602a;
-  --brand-soft: #e4f1e1;
-  --on-brand: #ffffff;
-  --accent: #c2410c;
-  --danger: #b42318;
-  --danger-soft: #fdecea;
-  --warn: #8a5a00;
-  --warn-soft: #fff3d6;
-  --info: #0b6a96;
-  --info-soft: #e1f2fa;
+  --bg: #eef8f0; /* menta claro aclarado */
+  --surface: #f8fcf9; /* menta claro, tono más luminoso */
+  --surface-2: #daf1de;
+  --line: #c3dec9; /* menta + salvia */
+  --fg: #051f20;
+  --muted: #3a6658; /* profundo + salvia, legible sobre claros */
+  --brand: #235347;
+  --brand-strong: #163832;
+  --brand-soft: #daf1de;
+  --on-brand: #daf1de;
+  --accent: #163832;
+  --danger: #051f20;
+  --danger-soft: #c3dec9;
+  --warn: #163832;
+  --warn-soft: #cfe7d4;
+  --info: #235347;
+  --info-soft: #daf1de;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #12140f;
-    --surface: #1b1e17;
-    --surface-2: #252920;
-    --line: #33382c;
-    --fg: #ecebe4;
-    --muted: #a3a194;
-    --brand: #6cc070;
-    --brand-strong: #8fd492;
-    --brand-soft: #1f3320;
-    --on-brand: #0d1a0e;
-    --accent: #fb923c;
-    --danger: #f38b80;
-    --danger-soft: #3a1d1a;
-    --warn: #f2c25b;
-    --warn-soft: #362a12;
-    --info: #6cc3ec;
-    --info-soft: #132b37;
+    --bg: #051f20;
+    --surface: #0b2b26;
+    --surface-2: #163832;
+    --line: #235347;
+    --fg: #daf1de;
+    --muted: #8eb69b;
+    --brand: #8eb69b;
+    --brand-strong: #daf1de;
+    --brand-soft: #163832;
+    --on-brand: #051f20;
+    --accent: #daf1de;
+    --danger: #daf1de;
+    --danger-soft: #235347;
+    --warn: #daf1de;
+    --warn-soft: #163832;
+    --info: #8eb69b;
+    --info-soft: #163832;
     color-scheme: dark;
   }
 }
 
+/* Tonos fijos de la paleta, para secciones que no cambian con el tema. */
+@theme {
+  --color-ink: #051f20;
+  --color-deep: #0b2b26;
+  --color-forest: #163832;
+  --color-pine: #235347;
+  --color-sage: #8eb69b;
+  --color-mint: #daf1de;
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-fraunces);
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
@@ -64,9 +81,23 @@
   --color-info-soft: var(--info-soft);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--bg);
   color: var(--fg);
+}
+
+::selection {
+  background: #8eb69b;
+  color: #051f20;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 
 .input {
@@ -112,5 +143,18 @@ body {
   @apply rounded-xl bg-brand-soft p-3 text-sm text-brand;
 }
 .alert-error {
-  @apply rounded-xl bg-danger-soft p-3 text-sm text-danger;
+  @apply rounded-xl border border-danger/30 bg-danger-soft p-3 text-sm font-medium text-danger;
+}
+
+/* Landing */
+.eyebrow {
+  @apply text-xs font-semibold tracking-[0.18em] text-muted uppercase;
+}
+
+.section {
+  @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+}
+
+.icon-btn {
+  @apply relative grid size-10 place-items-center rounded-full text-fg transition-colors hover:bg-surface-2;
 }

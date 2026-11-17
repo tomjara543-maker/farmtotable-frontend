@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Wordmark from "@/components/landing/Wordmark";
 import NotificationBell from "@/components/NotificationBell";
 import { logout, roleLabel, useAuth } from "@/lib/auth";
 import type { Role } from "@/lib/session";
@@ -53,12 +54,7 @@ export default function Nav() {
 
   return (
     <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-2 gap-y-2 px-4 py-3">
-      <Link href="/" className="mr-4 flex items-center gap-2 text-lg font-bold text-brand">
-        <span aria-hidden className="grid size-8 place-items-center rounded-lg bg-brand text-base text-on-brand">
-          🌱
-        </span>
-        FarmToTable
-      </Link>
+      <Wordmark className="mr-4 text-xl" />
       <div className="flex flex-1 flex-wrap gap-1">
         {visible.map((l) => {
           const active = pathname.startsWith(l.href);
