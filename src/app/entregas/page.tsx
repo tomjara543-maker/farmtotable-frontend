@@ -1,8 +1,9 @@
 "use client";
 
 import { RefreshIcon } from "@/components/landing/icons";
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import PageHeader from "@/components/PageHeader";
+import MapView, { MapStop } from "@/components/MapView";
 import RequireRole from "@/components/RequireRole";
 import { Delivery, DeliveryRoute, DeliveryStatus, patch, post } from "@/lib/api";
 import { dateTime, shortId } from "@/lib/format";
@@ -90,6 +91,12 @@ function MyDeliveries() {
               </div>
             </div>
             {d.status === "CANCELLED" ? <p className="text-sm text-muted">Entrega cancelada junto con el pedido.</p> : <Timeline d={d} />}
+            {d.lat != null && d.lng != null && d.status !== "CANCELLED" && (
+              <div className="space-y-1">
+                <MapView height={200} stops={[{ lat: d.lat, lng: d.lng, label: d.address, kind: "stop", order: 1 }]} />
+                {d.geoSource === "zone" && <p className="text-xs text-muted">Ubicación aproximada por zona.</p>}
+              </div>
+            )}
             {d.status === "FAILED" && <p className="alert-error">No pudimos entregar tu pedido. Lo intentaremos de nuevo pronto.</p>}
           </div>
         ))}
@@ -189,9 +196,10 @@ function Logistics() {
                 Ruta {shortId(route.id)} · Zona {route.zone}
               </h3>
               <p className="text-sm text-muted">
-                {route.deliveryIds.length} paradas · {route.totalKg} kg · creada {dateTime(route.createdAt)}
+                {route.deliveryIds.length} paradas · {route.totalKg} kg{route.distanceKm != null && <> · {route.distanceKm} km</>} · creada {dateTime(route.createdAt)}
               </p>
             </div>
+            <RouteMap route={route} />
             <ul className="divide-y divide-line">
               {items.map((d) => (
                 <li key={d.id} className="flex flex-wrap items-center gap-3 py-3">
@@ -248,6 +256,17 @@ function Logistics() {
       )}
     </div>
   );
+}
+
+function RouteMap({ route }: { route: DeliveryRoute }) {
+  const stops = useMemo<MapStop[]>(() => {
+    if (!route.depot || !route.stops?.length) return [];
+    return [
+      { lat: route.depot.lat, lng: route.depot.lng, label: route.depot.name, kind: "depot" },
+      ...route.stops.map((s) => ({ lat: s.lat, lng: s.lng, label: s.address, order: s.sequence, kind: s.coldChain ? ("cold" as const) : ("stop" as const) })),
+    ];
+  }, [route]);
+  return stops.length > 0 ? <MapView stops={stops} path height={300} /> : null;
 }
 
 function TemperatureForm({ onSubmit }: { onSubmit: (celsius: number) => void }) {

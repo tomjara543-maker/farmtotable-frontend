@@ -121,6 +121,9 @@ export interface Delivery {
   requiresColdChain: boolean;
   routeId?: string;
   sequence?: number;
+  lat?: number;
+  lng?: number;
+  geoSource?: "nominatim" | "zone";
   temperatureLog: { celsius: number; at: string }[];
   coldChainBreach: boolean;
   history: { status: DeliveryStatus; at: string }[];
@@ -133,6 +136,9 @@ export interface DeliveryRoute {
   deliveryIds: string[];
   totalKg: number;
   requiresColdChain: boolean;
+  distanceKm?: number;
+  depot?: { name: string; lat: number; lng: number };
+  stops?: { id: string; sequence: number; address: string; lat: number; lng: number; coldChain: boolean }[];
   createdAt: string;
 }
 

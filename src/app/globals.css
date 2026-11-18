@@ -158,3 +158,27 @@ body {
 .icon-btn {
   @apply relative grid size-10 place-items-center rounded-full text-fg transition-colors hover:bg-surface-2;
 }
+
+.map-pin {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 9999px;
+  border: 2px solid #daf1de;
+  background: #235347;
+  color: #daf1de;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgb(5 31 32 / 0.35);
+}
+.map-pin-depot {
+  background: #051f20;
+}
+.map-pin-cold {
+  background: #163832;
+  border-color: #8eb69b;
+}
+.leaflet-container {
+  font-family: inherit;
+}
