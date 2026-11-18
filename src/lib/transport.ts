@@ -7,6 +7,10 @@ export interface RawResponse {
   body: unknown;
 }
 
+const RETRIES = 4;
+const RETRY_DELAY_MS = 6000;
+const TIMEOUT_MS = 75_000;
+
 export class NetworkError extends Error {}
 
 export async function request(path: string, init: RequestInit = {}): Promise<RawResponse> {
@@ -20,10 +24,18 @@ export async function request(path: string, init: RequestInit = {}): Promise<Raw
   }
 
   if (init.body) headers.set("Content-Type", "application/json");
-  let res: Response;
-  try {
-    res = await fetch(`${API_URL}${path}`, { ...init, headers });
-  } catch {
+  const retries = method === "GET" ? RETRIES : 0;
+  let res: Response | undefined;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      res = await fetch(`${API_URL}${path}`, { ...init, headers, signal: AbortSignal.timeout(TIMEOUT_MS) });
+      if (![502, 503, 504].includes(res.status) || attempt === retries) break;
+    } catch {
+      res = undefined;
+    }
+    await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
+  }
+  if (!res) {
     throw new NetworkError("No se pudo conectar con el servidor. Puede estar despertando o limitando peticiones; espera un momento y pulsa Actualizar.");
   }
   if (res.status === 429) throw new NetworkError("Demasiadas peticiones seguidas. Espera un momento y pulsa Actualizar.");
