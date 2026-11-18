@@ -79,7 +79,7 @@ export default function LoginPage() {
           <div className="grid gap-2 sm:grid-cols-3">
             {DEMO_ACCOUNTS.map((a) => (
               <button key={a.email} onClick={() => signIn(a.email, a.password)} disabled={busy} className="btn-ghost flex-col gap-0 px-2 py-2 text-xs">
-                <span className="text-lg">{a.icon}</span>
+                <a.icon size={20} />
                 {a.label}
               </button>
             ))}

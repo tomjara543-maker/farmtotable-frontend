@@ -336,7 +336,7 @@ on("delivery.failed", (db, { orderId }: { orderId: string }) => {
 on("coldchain.breach", (db, { orderId, celsius }: { orderId: string; celsius: number }) => {
   notify(db, admins(db), {
     type: "DELIVERY",
-    title: "⚠ Ruptura de cadena de frío",
+    title: "Ruptura de cadena de frío",
     body: `El pedido ${shortId(orderId)} registró ${celsius} °C (rango ${COLD_CHAIN_RANGE.min}–${COLD_CHAIN_RANGE.max} °C).`,
     link: "/entregas",
   });

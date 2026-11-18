@@ -1,5 +1,6 @@
 "use client";
 
+import { RefreshIcon } from "@/components/landing/icons";
 import { FormEvent, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import RequireRole from "@/components/RequireRole";
@@ -7,6 +8,7 @@ import { Delivery, DeliveryRoute, DeliveryStatus, patch, post } from "@/lib/api"
 import { dateTime, shortId } from "@/lib/format";
 import { deliveryStatus } from "@/lib/labels";
 import { useApi } from "@/lib/useApi";
+import { SnowflakeIcon, TruckIcon, MapPinIcon } from "@/components/landing/icons";
 
 export default function DeliveriesPage() {
   return (
@@ -45,8 +47,8 @@ function ColdChain({ d }: { d: Delivery }) {
   const last = d.temperatureLog.at(-1);
   return (
     <p className={`badge ${d.coldChainBreach ? "badge-danger" : "badge-info"}`}>
-      ❄ Cadena de frío{last ? ` · última lectura ${last.celsius} °C` : ""}
-      {d.coldChainBreach && " · ⚠ fuera de rango"}
+      <SnowflakeIcon size={14} /> Cadena de frío{last ? ` · última lectura ${last.celsius} °C` : ""}
+      {d.coldChainBreach && " · fuera de rango"}
     </p>
   );
 }
@@ -60,7 +62,7 @@ function MyDeliveries() {
         subtitle="Seguimiento de tus pedidos pagados hasta tu puerta."
         action={
           <button onClick={reload} className="btn-ghost">
-            ↻ Actualizar
+            <RefreshIcon size={16} /> Actualizar
           </button>
         }
       />
@@ -68,7 +70,7 @@ function MyDeliveries() {
       {!data && !error && <div className="card h-32 animate-pulse bg-surface-2" />}
       {data?.length === 0 && (
         <div className="card py-12 text-center">
-          <p className="text-4xl">🚚</p>
+          <TruckIcon size={40} strokeWidth={1.5} className="mx-auto text-brand" />
           <p className="mt-3 text-muted">Cuando pagues un pedido verás aquí su entrega.</p>
         </div>
       )}
@@ -79,7 +81,7 @@ function MyDeliveries() {
               <div>
                 <p className="font-semibold">Pedido {shortId(d.orderId)}</p>
                 <p className="text-sm text-muted">
-                  📍 {d.address} · Zona {d.zone} · {d.totalKg} kg
+                  <MapPinIcon size={14} className="mr-1 inline -mt-0.5" />{d.address} · Zona {d.zone} · {d.totalKg} kg
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -143,7 +145,7 @@ function Logistics() {
         subtitle="Agrupa las entregas pagadas por zona en rutas, sigue su estado y controla la cadena de frío."
         action={
           <button onClick={reload} className="btn-ghost">
-            ↻ Actualizar
+            <RefreshIcon size={16} /> Actualizar
           </button>
         }
       />
@@ -159,8 +161,8 @@ function Logistics() {
             {pendingByZone.map(([zone, items]) => (
               <div key={zone} className="card space-y-3">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-xl font-bold">📍 {zone}</h3>
-                  {items.some((d) => d.requiresColdChain) && <span className="badge badge-info">❄ Frío</span>}
+                  <h3 className="flex items-center gap-2 font-display text-xl font-medium"><MapPinIcon size={18} className="text-brand" />{zone}</h3>
+                  {items.some((d) => d.requiresColdChain) && <span className="badge badge-info"><SnowflakeIcon size={14} /> Frío</span>}
                 </div>
                 <p className="text-sm text-muted">
                   {items.length} entrega(s) · {items.reduce((s, d) => s + d.totalKg, 0)} kg

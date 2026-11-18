@@ -4,13 +4,15 @@ import { FormEvent, ReactNode, useEffect, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import RequireRole from "@/components/RequireRole";
 import { api, post, Producer, Product } from "@/lib/api";
-import { categoryIcon, certificationLabel, daysUntil, money } from "@/lib/format";
+import { certificationLabel, daysUntil, money } from "@/lib/format";
+import { MapPinIcon, CloseIcon, CheckIcon, HomeIcon, AwardIcon, SaladIcon, WheatIcon } from "@/components/landing/icons";
+import CategoryIcon from "@/components/CategoryIcon";
 
-function Section({ title, icon, children }: { title: string; icon: string; children: ReactNode }) {
+function Section({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) {
   return (
     <div className="space-y-4">
       <h2 className="flex items-center gap-2 font-semibold">
-        <span aria-hidden className="grid size-8 place-items-center rounded-lg bg-brand-soft">
+        <span aria-hidden className="grid size-9 place-items-center rounded-xl bg-brand-soft text-brand">
           {icon}
         </span>
         {title}
@@ -144,7 +146,7 @@ function ProducerPanel() {
             <p className="text-xs font-medium tracking-wide text-muted uppercase">Granja</p>
             <p className="text-xl font-bold">{producer.farmName}</p>
             <p className="text-sm text-muted">
-              📍 {producer.locationLat.toFixed(4)}, {producer.locationLng.toFixed(4)}
+              <MapPinIcon size={14} className="mr-1 inline -mt-0.5" />{producer.locationLat.toFixed(4)}, {producer.locationLng.toFixed(4)}
             </p>
           </div>
           <div className="space-y-2">
@@ -157,7 +159,7 @@ function ProducerPanel() {
                   const expired = daysUntil(c.validUntil) < 0;
                   return (
                     <li key={c.type} className={`badge ${expired ? "badge-danger" : "badge-brand"}`}>
-                      {expired ? "✕" : "✓"} {certificationLabel[c.type] ?? c.type} · {expired ? "venció" : "hasta"} {c.validUntil}
+                      {expired ? <CloseIcon size={12} /> : <CheckIcon size={12} />} {certificationLabel[c.type] ?? c.type} · {expired ? "venció" : "hasta"} {c.validUntil}
                     </li>
                   );
                 })}
@@ -170,7 +172,7 @@ function ProducerPanel() {
               {products.map((p) => (
                 <li key={p.id} className="flex justify-between gap-2">
                   <span>
-                    {categoryIcon(p.category)} {p.name}
+                    <span className="inline-flex items-center gap-2"><CategoryIcon category={p.category} size={16} className="text-brand" />{p.name}</span>
                   </span>
                   <span className="text-muted">
                     {p.availableKg} kg · {money(p.currentPrice)}
@@ -184,7 +186,7 @@ function ProducerPanel() {
 
       <div className="grid gap-6 md:grid-cols-2">
         <form onSubmit={createProducer} className="card">
-          <Section title="Registrar granja" icon="🏡">
+          <Section title="Registrar granja" icon={<HomeIcon size={18} />}>
             <input name="farmName" placeholder="Nombre de la granja" className="input" required />
             <div className="flex gap-2">
               <input name="lat" type="number" step="any" min={-90} max={90} placeholder="Latitud" className="input" required />
@@ -195,7 +197,7 @@ function ProducerPanel() {
         </form>
 
         <form onSubmit={addCertification} className="card">
-          <Section title="Certificaciones" icon="🏅">
+          <Section title="Certificaciones" icon={<AwardIcon size={18} />}>
             <select name="type" className="input" required>
               {Object.entries(certificationLabel).map(([value, label]) => (
                 <option key={value} value={value}>
@@ -215,7 +217,7 @@ function ProducerPanel() {
         </form>
 
         <form onSubmit={createProduct} className="card">
-          <Section title="Nuevo producto" icon="🥬">
+          <Section title="Nuevo producto" icon={<SaladIcon size={18} />}>
             <input name="name" placeholder="Nombre (ej. Tomate chonto)" className="input" required />
             <input name="category" placeholder="Categoría (ej. Hortalizas, Frutas, Lácteos)" className="input" required />
             <input name="basePrice" type="number" min={0.01} step="any" placeholder="Precio base por kg" className="input" required />
@@ -230,7 +232,7 @@ function ProducerPanel() {
         </form>
 
         <form onSubmit={createBatch} className="card">
-          <Section title="Registrar cosecha (lote)" icon="🌾">
+          <Section title="Registrar cosecha (lote)" icon={<WheatIcon size={18} />}>
             <select name="productId" className="input" required>
               {products.map((p) => (
                 <option key={p.id} value={p.id}>

@@ -1,11 +1,13 @@
 "use client";
 
+import { RefreshIcon } from "@/components/landing/icons";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import RequireRole from "@/components/RequireRole";
 import { api, ZoneSummary } from "@/lib/api";
 import { shortId } from "@/lib/format";
+import { MapIcon, MapPinIcon, SnowflakeIcon } from "@/components/landing/icons";
 
 export default function ZonesPage() {
   return <RequireRole roles={["ADMIN"]}>{() => <Zones />}</RequireRole>;
@@ -40,7 +42,7 @@ function Zones() {
         action={
           <div className="flex gap-2">
             <button onClick={() => setVersion((v) => v + 1)} className="btn-ghost">
-              ↻ Actualizar
+              <RefreshIcon size={16} /> Actualizar
             </button>
             <Link href="/entregas" className="btn">
               Planificar rutas
@@ -53,7 +55,7 @@ function Zones() {
 
       {entries.length === 0 && !error ? (
         <div className="card py-12 text-center">
-          <p className="text-4xl">🗺️</p>
+          <MapIcon size={40} strokeWidth={1.5} className="mx-auto text-brand" />
           <p className="mt-3 text-muted">No hay pedidos confirmados todavía.</p>
         </div>
       ) : (
@@ -63,9 +65,9 @@ function Zones() {
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-xs font-medium tracking-wide text-muted uppercase">Zona</p>
-                  <h2 className="text-xl font-bold">📍 {zone}</h2>
+                  <h2 className="flex items-center gap-2 font-display text-xl font-medium"><MapPinIcon size={18} className="text-brand" />{zone}</h2>
                 </div>
-                {z.requiresColdChain && <span className="badge badge-info">❄ Cadena de frío</span>}
+                {z.requiresColdChain && <span className="badge badge-info"><SnowflakeIcon size={14} /> Cadena de frío</span>}
               </div>
               <dl className="grid grid-cols-2 gap-3">
                 <div className="rounded-xl bg-surface-2 p-3">

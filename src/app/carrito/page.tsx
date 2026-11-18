@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import RequireRole from "@/components/RequireRole";
 import { api, CartItem, del, Order, post, Product } from "@/lib/api";
-import { categoryIcon, money, shortId } from "@/lib/format";
+import { money, shortId } from "@/lib/format";
+import { CartIcon, SnowflakeIcon } from "@/components/landing/icons";
+import CategoryIcon from "@/components/CategoryIcon";
 
 interface Line extends CartItem {
   product?: Product;
@@ -77,7 +79,7 @@ function Cart() {
           <span>{message.text}</span>
           {message.orderId && (
             <Link href="/pedidos" className="font-semibold underline">
-              Ir a pagar →
+              Ir a pagar
             </Link>
           )}
         </div>
@@ -87,7 +89,7 @@ function Cart() {
         <div className="card h-40 animate-pulse bg-surface-2" />
       ) : items.length === 0 ? (
         <div className="card py-12 text-center">
-          <p className="text-4xl">🛒</p>
+          <CartIcon size={40} strokeWidth={1.5} className="mx-auto text-brand" />
           <p className="mt-3 text-muted">Tu carrito está vacío.</p>
           <Link href="/catalogo" className="btn mt-5">
             Ir al catálogo
@@ -98,8 +100,8 @@ function Cart() {
           <ul className="card divide-y divide-line p-0">
             {items.map((l) => (
               <li key={l.productId} className="flex items-center gap-4 p-4">
-                <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-surface-2 text-2xl" aria-hidden>
-                  {l.product ? categoryIcon(l.product.category) : "🧺"}
+                <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-surface-2 text-brand" aria-hidden>
+                  <CategoryIcon category={l.product?.category} size={24} />
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="font-medium">{l.product?.name ?? l.productId}</p>
@@ -127,7 +129,7 @@ function Cart() {
                 <dd>{money(total)}</dd>
               </div>
             </dl>
-            {coldChain && <p className="badge badge-info">❄ Incluye productos con cadena de frío</p>}
+            {coldChain && <p className="badge badge-info"><SnowflakeIcon size={14} /> Incluye productos con cadena de frío</p>}
             <label className="label">
               <span>Zona de entrega</span>
               <select className="input" value={zone} onChange={(e) => setZone(e.target.value)}>

@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { AuthCard, PasswordInput } from "@/components/AuthCard";
 import { register, roleHome } from "@/lib/auth";
+import { CartIcon, SproutIcon } from "@/components/landing/icons";
 
 const roles = [
-  { value: "BUYER", icon: "🛒", title: "Quiero comprar", text: "Restaurante, tienda o consumidor" },
-  { value: "PRODUCER", icon: "🧑‍🌾", title: "Quiero vender", text: "Productor agrícola o granja" },
+  { value: "BUYER", icon: CartIcon, title: "Quiero comprar", text: "Restaurante, tienda o consumidor" },
+  { value: "PRODUCER", icon: SproutIcon, title: "Quiero vender", text: "Productor agrícola o granja" },
 ] as const;
 
 function passwordIssues(password: string) {
@@ -72,7 +73,7 @@ export default function RegisterPage() {
               }`}
             >
               <input type="radio" name="role" value={r.value} checked={role === r.value} onChange={() => setRole(r.value)} className="sr-only" />
-              <span className="text-2xl">{r.icon}</span>
+              <r.icon size={26} className="text-brand" />
               <span className="mt-1 block font-semibold">{r.title}</span>
               <span className="block text-xs text-muted">{r.text}</span>
             </label>
@@ -91,7 +92,7 @@ export default function RegisterPage() {
           <PasswordInput name="password" autoComplete="new-password" minLength={8} onChange={setPassword} />
           {password && (
             <span className={`block text-xs font-normal ${issues.length ? "text-warn" : "text-brand"}`}>
-              {issues.length ? `Usa ${issues.join(" y ")}` : "✓ Contraseña válida"}
+              {issues.length ? `Usa ${issues.join(" y ")}` : "Contraseña válida"}
             </span>
           )}
         </label>

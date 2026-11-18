@@ -30,7 +30,7 @@ export default function SiteFrame({ children }: { children: React.ReactNode }) {
         <DemoBanner />
         <Nav />
       </header>
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
+      <main className="mx-auto w-full max-w-6xl flex-1 px-5 py-12 sm:px-8 sm:py-16">{children}</main>
       <SiteFooter />
     </>
   );

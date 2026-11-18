@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { BellIcon } from "@/components/landing/icons";
 
 const POLL_MS = 20_000;
 const EVENT = "farmtotable:notifications";
@@ -33,10 +34,10 @@ export default function NotificationBell() {
   return (
     <Link
       href="/notificaciones"
-      className="relative grid size-9 place-items-center rounded-lg text-lg hover:bg-surface-2"
+      className="relative grid size-10 place-items-center rounded-full text-fg transition-colors hover:bg-surface-2"
       aria-label={count ? `Notificaciones (${count} sin leer)` : "Notificaciones"}
     >
-      <span aria-hidden>🔔</span>
+      <BellIcon size={20} />
       {count > 0 && (
         <span className="absolute -top-0.5 -right-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1 text-[0.65rem] font-bold text-white">
           {count > 9 ? "9+" : count}

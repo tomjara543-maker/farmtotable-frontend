@@ -53,7 +53,7 @@ export default function Nav() {
   }
 
   return (
-    <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-2 gap-y-2 px-4 py-3">
+    <nav className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-2 gap-y-2 px-5 py-3 sm:px-8">
       <Wordmark className="mr-4 text-xl" />
       <div className="flex flex-1 flex-wrap gap-1">
         {visible.map((l) => {
@@ -62,7 +62,7 @@ export default function Nav() {
             <Link
               key={l.label}
               href={l.href}
-              className={`rounded-lg px-3 py-1.5 text-sm transition-colors ${
+              className={`rounded-full px-4 py-2 text-sm transition-colors ${
                 active ? "bg-brand-soft font-semibold text-brand" : "text-muted hover:bg-surface-2 hover:text-fg"
               }`}
             >

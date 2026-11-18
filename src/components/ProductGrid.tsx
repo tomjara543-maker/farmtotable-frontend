@@ -1,12 +1,14 @@
 import AddToCart from "@/components/AddToCart";
 import type { Product } from "@/lib/api";
-import { categoryIcon, money } from "@/lib/format";
+import { money } from "@/lib/format";
+import { BasketIcon, SnowflakeIcon, ArrowUpIcon, ArrowDownIcon } from "@/components/landing/icons";
+import CategoryIcon from "@/components/CategoryIcon";
 
 export function ProductGrid({ products }: { products: Product[] }) {
   if (products.length === 0) {
     return (
       <div className="card py-12 text-center">
-        <p className="text-4xl">🧺</p>
+        <BasketIcon size={40} strokeWidth={1.5} className="mx-auto text-brand" />
         <p className="mt-3 text-muted">Todavía no hay productos. Los productores los publican desde su panel.</p>
       </div>
     );
@@ -17,12 +19,10 @@ export function ProductGrid({ products }: { products: Product[] }) {
       {products.map((p) => (
         <article key={p.id} className="card flex flex-col gap-4 overflow-hidden p-0">
           <div className="relative grid h-32 place-items-center bg-surface-2">
-            <span aria-hidden className="text-6xl leading-none">
-              {categoryIcon(p.category)}
-            </span>
+            <CategoryIcon category={p.category} size={64} strokeWidth={1} aria-hidden className="text-brand" />
             <div className="absolute top-3 left-3 flex flex-wrap gap-1">
               {p.inSeason && <span className="badge badge-brand">Temporada</span>}
-              {p.requiresColdChain && <span className="badge badge-info">❄ Cadena de frío</span>}
+              {p.requiresColdChain && <span className="badge badge-info"><SnowflakeIcon size={14} /> Cadena de frío</span>}
             </div>
           </div>
           <div className="flex flex-1 flex-col gap-3 px-5 pb-5">
@@ -35,8 +35,8 @@ export function ProductGrid({ products }: { products: Product[] }) {
                 {money(p.currentPrice)} <span className="text-sm font-normal text-muted">/ kg</span>
               </p>
               {p.currentPrice !== p.basePrice && (
-                <span className={`text-xs ${p.currentPrice > p.basePrice ? "text-accent" : "text-brand"}`}>
-                  {p.currentPrice > p.basePrice ? "▲ poca oferta" : `▼ antes ${money(p.basePrice)}`}
+                <span className={`inline-flex items-center gap-1 text-xs ${p.currentPrice > p.basePrice ? "text-accent" : "text-brand"}`}>
+                  {p.currentPrice > p.basePrice ? <><ArrowUpIcon size={12} /> poca oferta</> : <><ArrowDownIcon size={12} /> antes {money(p.basePrice)}</>}
                 </span>
               )}
             </div>

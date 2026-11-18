@@ -32,7 +32,7 @@ export default function AddToCart({ productId, maxKg }: { productId: string; max
         return;
       }
       await put("/carts/me/items", { productId, quantity });
-      setMessage({ ok: true, text: "✓ Añadido al carrito" });
+      setMessage({ ok: true, text: "Añadido al carrito" });
     } catch (e) {
       setMessage({ ok: false, text: (e as Error).message });
     } finally {

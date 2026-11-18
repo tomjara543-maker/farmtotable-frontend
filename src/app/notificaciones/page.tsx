@@ -8,6 +8,7 @@ import { Notification, post } from "@/lib/api";
 import { timeAgo } from "@/lib/format";
 import { notificationIcon } from "@/lib/labels";
 import { useApi } from "@/lib/useApi";
+import { BellIcon } from "@/components/landing/icons";
 
 export default function NotificationsPage() {
   return <RequireRole>{() => <Notifications />}</RequireRole>;
@@ -47,7 +48,7 @@ function Notifications() {
       {!data && !error && <div className="card h-40 animate-pulse bg-surface-2" />}
       {data?.length === 0 && (
         <div className="card py-12 text-center">
-          <p className="text-4xl">🔔</p>
+          <BellIcon size={40} strokeWidth={1.5} className="mx-auto text-brand" />
           <p className="mt-3 text-muted">No tienes notificaciones.</p>
         </div>
       )}
@@ -55,8 +56,8 @@ function Notifications() {
         <ul className="card divide-y divide-line p-0">
           {data.map((n) => (
             <li key={n.id} className={`flex gap-4 p-4 ${n.read ? "" : "bg-brand-soft/40"}`}>
-              <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-xl bg-surface-2 text-xl">
-                {notificationIcon[n.type]}
+              <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-xl bg-surface-2 text-brand">
+                {(() => { const Ic = notificationIcon[n.type]; return <Ic size={20} />; })()}
               </span>
               <div className="min-w-0 flex-1 space-y-0.5">
                 <div className="flex flex-wrap items-center gap-2">

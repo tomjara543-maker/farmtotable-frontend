@@ -1,5 +1,6 @@
 "use client";
 
+import { RefreshIcon } from "@/components/landing/icons";
 import { useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import RequireRole from "@/components/RequireRole";
@@ -35,7 +36,7 @@ function Analytics() {
               </button>
             ))}
             <button onClick={reload} className="btn-ghost ml-1" aria-label="Actualizar">
-              ↻
+              <RefreshIcon size={16} />
             </button>
           </div>
         }

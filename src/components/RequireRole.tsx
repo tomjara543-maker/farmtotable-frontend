@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { roleHome, roleLabel, useAuth } from "@/lib/auth";
 import type { Role, User } from "@/lib/session";
+import { LockIcon } from "@/components/landing/icons";
 
 export default function RequireRole({ roles, children }: { roles?: Role[]; children: (user: User) => ReactNode }) {
   const { user, ready } = useAuth();
@@ -27,7 +28,7 @@ export default function RequireRole({ roles, children }: { roles?: Role[]; child
   if (roles && !roles.includes(user.role)) {
     return (
       <div className="card mx-auto max-w-md space-y-3 py-10 text-center">
-        <p className="text-4xl">🔒</p>
+        <LockIcon size={40} strokeWidth={1.5} className="mx-auto text-brand" />
         <h1 className="text-lg font-semibold">Esta sección no está disponible para tu cuenta</h1>
         <p className="text-sm text-muted">
           Es para {roles.map((r) => roleLabel[r].toLowerCase()).join(" o ")}. Entraste como {roleLabel[user.role].toLowerCase()}.

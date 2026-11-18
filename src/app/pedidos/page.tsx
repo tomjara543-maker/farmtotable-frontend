@@ -1,5 +1,6 @@
 "use client";
 
+import { RefreshIcon } from "@/components/landing/icons";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import PageHeader from "@/components/PageHeader";
@@ -8,6 +9,7 @@ import { ApiError, Order, PaymentMethod, post } from "@/lib/api";
 import { dateTime, money, shortId } from "@/lib/format";
 import { orderStatus } from "@/lib/labels";
 import { useApi } from "@/lib/useApi";
+import { PackageIcon, SnowflakeIcon, CardIcon, LandmarkIcon, BanknoteIcon } from "@/components/landing/icons";
 
 const CANCELLABLE: Order["status"][] = ["PENDING_INVENTORY", "CONFIRMED", "PAID"];
 
@@ -43,7 +45,7 @@ function Orders() {
         subtitle="Sigue el estado de tus compras: reserva, pago y entrega."
         action={
           <button onClick={reload} className="btn-ghost">
-            ↻ Actualizar
+            <RefreshIcon size={16} /> Actualizar
           </button>
         }
       />
@@ -51,7 +53,7 @@ function Orders() {
       {notice && <p className={notice.ok ? "alert-ok" : "alert-error"}>{notice.text}</p>}
       {data && orders.length === 0 && (
         <div className="card py-12 text-center">
-          <p className="text-4xl">📦</p>
+          <PackageIcon size={40} strokeWidth={1.5} className="mx-auto text-brand" />
           <p className="mt-3 text-muted">No tienes pedidos todavía.</p>
           <Link href="/catalogo" className="btn mt-5">
             Ir al catálogo
@@ -67,7 +69,7 @@ function Orders() {
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="font-semibold">Pedido {shortId(o.id)}</p>
                   <span className={`badge ${orderStatus[o.status].className}`}>{orderStatus[o.status].text}</span>
-                  {o.requiresColdChain && <span className="badge badge-info">❄ Frío</span>}
+                  {o.requiresColdChain && <span className="badge badge-info"><SnowflakeIcon size={14} /> Frío</span>}
                 </div>
                 <p className="text-sm text-muted">
                   {dateTime(o.createdAt)} · Zona {o.deliveryZone} · {o.items.map((i) => `${i.productName ?? shortId(i.productId)} ${i.quantity} kg`).join(", ")}
@@ -115,10 +117,10 @@ function Orders() {
   );
 }
 
-const methods: { value: PaymentMethod; label: string; icon: string }[] = [
-  { value: "CARD", label: "Tarjeta", icon: "💳" },
-  { value: "PSE", label: "PSE", icon: "🏦" },
-  { value: "CASH_ON_DELIVERY", label: "Contra entrega", icon: "💵" },
+const methods: { value: PaymentMethod; label: string; icon: typeof CardIcon }[] = [
+  { value: "CARD", label: "Tarjeta", icon: CardIcon },
+  { value: "PSE", label: "PSE", icon: LandmarkIcon },
+  { value: "CASH_ON_DELIVERY", label: "Contra entrega", icon: BanknoteIcon },
 ];
 
 function luhn(number: string) {
@@ -176,7 +178,7 @@ function PaymentForm({ order, onClose, onDone }: { order: Order; onClose: () => 
             onClick={() => setMethod(m.value)}
             className={`rounded-xl border p-2 text-sm ${method === m.value ? "border-brand bg-brand-soft font-semibold" : "border-line bg-surface"}`}
           >
-            <span className="block text-xl">{m.icon}</span>
+            <m.icon size={22} className="mx-auto mb-1" />
             {m.label}
           </button>
         ))}

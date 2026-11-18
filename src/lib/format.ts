@@ -1,25 +1,3 @@
-const categoryIcons: [string, string][] = [
-  ["fruta", "🍎"],
-  ["hortaliza", "🥕"],
-  ["verdura", "🥬"],
-  ["tubérculo", "🥔"],
-  ["tuberculo", "🥔"],
-  ["grano", "🌾"],
-  ["cereal", "🌾"],
-  ["lácteo", "🧀"],
-  ["lacteo", "🧀"],
-  ["huevo", "🥚"],
-  ["hierba", "🌿"],
-  ["aromática", "🌿"],
-  ["café", "☕"],
-  ["miel", "🍯"],
-];
-
-export function categoryIcon(category: string) {
-  const c = category.toLowerCase();
-  return categoryIcons.find(([key]) => c.includes(key))?.[1] ?? "🧺";
-}
-
 const cop = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
 export const money = (n: number) => cop.format(n);
 

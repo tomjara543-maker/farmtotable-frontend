@@ -1,10 +1,12 @@
 "use client";
 
+import { RefreshIcon } from "@/components/landing/icons";
 import { useEffect, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import RequireRole from "@/components/RequireRole";
 import { api, post, Product, Reservation, StockByBatch } from "@/lib/api";
-import { categoryIcon, daysUntil, shortId } from "@/lib/format";
+import { daysUntil, shortId } from "@/lib/format";
+import CategoryIcon from "@/components/CategoryIcon";
 
 const SOON_DAYS = 3;
 
@@ -86,7 +88,7 @@ function Inventory({ isAdmin }: { isAdmin: boolean }) {
         subtitle="Stock por lote, ordenado según FEFO: lo primero en vencer es lo primero en salir."
         action={
           <button onClick={load} className="btn-ghost">
-            ↻ Actualizar
+            <RefreshIcon size={16} /> Actualizar
           </button>
         }
       />
@@ -127,8 +129,7 @@ function Inventory({ isAdmin }: { isAdmin: boolean }) {
                   <tr key={r.batchId} className={r.days < 0 ? "opacity-60" : ""}>
                     <td className="px-4 py-3 text-muted">#{i + 1}</td>
                     <td className="px-4 py-3 font-medium">
-                      {data.products[r.productId] ? categoryIcon(data.products[r.productId].category) : "🧺"}{" "}
-                      {productName(r.productId)}
+                      <span className="inline-flex items-center gap-2"><CategoryIcon category={data.products[r.productId]?.category} size={18} className="text-brand" />{productName(r.productId)}</span>
                     </td>
                     <td className="px-4 py-3 font-mono text-xs text-muted">{shortId(r.batchId)}</td>
                     <td className="px-4 py-3 text-right font-semibold">{r.quantityAvailable} kg</td>

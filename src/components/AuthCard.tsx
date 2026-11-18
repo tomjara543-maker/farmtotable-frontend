@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode, useState } from "react";
+import { SproutIcon, CarrotIcon, AppleIcon, SaladIcon } from "@/components/landing/icons";
 
 export function AuthCard({ title, subtitle, children, footer }: { title: string; subtitle: string; children: ReactNode; footer: ReactNode }) {
   return (
@@ -9,7 +10,7 @@ export function AuthCard({ title, subtitle, children, footer }: { title: string;
       <div className="hidden flex-col justify-between bg-brand-soft p-10 md:flex">
         <Link href="/" className="flex items-center gap-2 text-lg font-bold text-brand">
           <span aria-hidden className="grid size-8 place-items-center rounded-lg bg-brand text-on-brand">
-            🌱
+            <SproutIcon size={18} />
           </span>
           FarmToTable
         </Link>
@@ -17,9 +18,11 @@ export function AuthCard({ title, subtitle, children, footer }: { title: string;
           <p className="text-2xl leading-snug font-bold">Del campo a tu mesa, sin intermediarios.</p>
           <p className="text-sm text-muted">Producto fresco y trazable por lote, directo de la granja.</p>
         </div>
-        <p aria-hidden className="text-6xl">
-          🥕🍅🥬
-        </p>
+        <div aria-hidden className="flex gap-4 text-brand">
+          <CarrotIcon size={44} strokeWidth={1.25} />
+          <AppleIcon size={44} strokeWidth={1.25} />
+          <SaladIcon size={44} strokeWidth={1.25} />
+        </div>
       </div>
       <div className="space-y-6 p-6 sm:p-10">
         <div>
