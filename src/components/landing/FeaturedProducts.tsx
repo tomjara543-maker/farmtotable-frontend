@@ -1,17 +1,17 @@
 import Link from "next/link";
-import { AppleIcon, ArrowRightIcon, CarrotIcon, CherryIcon, CitrusIcon, LeafIcon, SaladIcon, SproutIcon } from "./icons";
+import { ArrowRightIcon } from "./icons";
 import ProductCard, { type FeaturedProduct } from "./ProductCard";
 
 // Datos de muestra para la maqueta estática (sin backend).
 const products: FeaturedProduct[] = [
-  { name: "Mango de azúcar", origin: "Cereté, Córdoba", unit: "1 kg", price: 6800, tag: "Temporada", Icon: AppleIcon },
-  { name: "Aguacate Hass", origin: "Finca El Recreo", unit: "1 kg", price: 9500, Icon: LeafIcon },
-  { name: "Tomate chonto", origin: "Productores del Sinú", unit: "1 kg", price: 4200, Icon: CherryIcon },
-  { name: "Limón Tahití", origin: "Finca La Esperanza", unit: "1 kg", price: 3900, Icon: CitrusIcon },
-  { name: "Zanahoria", origin: "Huerta Los Robles", unit: "1 kg", price: 3200, Icon: CarrotIcon },
-  { name: "Lechuga crespa", origin: "Cultivo orgánico", unit: "unidad", price: 2800, tag: "Orgánico", Icon: SaladIcon },
-  { name: "Cebolla larga", origin: "Huerta Los Robles", unit: "atado", price: 2500, Icon: SproutIcon },
-  { name: "Plátano hartón", origin: "Finca El Recreo", unit: "1 kg", price: 3600, Icon: LeafIcon },
+  { name: "Mango de azúcar", origin: "Cereté, Córdoba", unit: "1 kg", price: 6800, tag: "Temporada", icon: "apple" },
+  { name: "Aguacate Hass", origin: "Finca El Recreo", unit: "1 kg", price: 9500, icon: "leaf" },
+  { name: "Tomate chonto", origin: "Productores del Sinú", unit: "1 kg", price: 4200, icon: "cherry" },
+  { name: "Limón Tahití", origin: "Finca La Esperanza", unit: "1 kg", price: 3900, icon: "citrus" },
+  { name: "Zanahoria", origin: "Huerta Los Robles", unit: "1 kg", price: 3200, icon: "carrot" },
+  { name: "Lechuga crespa", origin: "Cultivo orgánico", unit: "unidad", price: 2800, tag: "Orgánico", icon: "salad" },
+  { name: "Cebolla larga", origin: "Huerta Los Robles", unit: "atado", price: 2500, icon: "sprout" },
+  { name: "Plátano hartón", origin: "Finca El Recreo", unit: "1 kg", price: 3600, icon: "leaf" },
 ];
 
 export default function FeaturedProducts() {

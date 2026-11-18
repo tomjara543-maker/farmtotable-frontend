@@ -1,7 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { CheckIcon, HeartIcon, PlusIcon } from "./icons";
+import { AppleIcon, CarrotIcon, CheckIcon, CherryIcon, CitrusIcon, HeartIcon, LeafIcon, PlusIcon, SaladIcon, SproutIcon } from "./icons";
+
+// Un componente de servidor no puede pasar funciones (como un icono) a uno de cliente,
+// así que el producto trae el nombre del icono y aquí se resuelve.
+const icons = {
+  apple: AppleIcon,
+  carrot: CarrotIcon,
+  cherry: CherryIcon,
+  citrus: CitrusIcon,
+  leaf: LeafIcon,
+  salad: SaladIcon,
+  sprout: SproutIcon,
+};
 
 export type FeaturedProduct = {
   name: string;
@@ -9,7 +21,7 @@ export type FeaturedProduct = {
   unit: string;
   price: number;
   tag?: string;
-  Icon: (p: { size?: number; strokeWidth?: number; className?: string }) => React.ReactNode;
+  icon: keyof typeof icons;
 };
 
 const cop = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 });
@@ -17,7 +29,7 @@ const cop = new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP",
 export default function ProductCard({ product }: { product: FeaturedProduct }) {
   const [added, setAdded] = useState(false);
   const [fav, setFav] = useState(false);
-  const { Icon } = product;
+  const Icon = icons[product.icon];
 
   function add() {
     setAdded(true);
