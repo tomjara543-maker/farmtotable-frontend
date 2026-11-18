@@ -100,7 +100,7 @@ function Inventory({ isAdmin }: { isAdmin: boolean }) {
         {stats.map((s) => (
           <div key={s.label} className="card">
             <p className="text-sm text-muted">{s.label}</p>
-            <p className={`mt-1 text-3xl font-bold ${s.tone}`}>{s.value}</p>
+            <p className={`mt-1 font-display text-4xl font-medium ${s.tone}`}>{s.value}</p>
           </div>
         ))}
       </div>

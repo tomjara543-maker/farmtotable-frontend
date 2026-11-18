@@ -72,11 +72,11 @@ function Zones() {
               <dl className="grid grid-cols-2 gap-3">
                 <div className="rounded-xl bg-surface-2 p-3">
                   <dt className="text-xs text-muted">Pedidos</dt>
-                  <dd className="text-2xl font-bold">{z.orders}</dd>
+                  <dd className="font-display text-3xl font-medium">{z.orders}</dd>
                 </div>
                 <div className="rounded-xl bg-surface-2 p-3">
                   <dt className="text-xs text-muted">Carga total</dt>
-                  <dd className="text-2xl font-bold">{z.totalKg} kg</dd>
+                  <dd className="font-display text-3xl font-medium">{z.totalKg} kg</dd>
                 </div>
               </dl>
               <div className="flex flex-wrap gap-1">

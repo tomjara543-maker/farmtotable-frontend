@@ -30,7 +30,7 @@ function Analytics() {
               <button
                 key={r}
                 onClick={() => setDays(r)}
-                className={`rounded-lg px-3 py-1.5 text-sm ${days === r ? "bg-brand-soft font-semibold text-brand" : "text-muted hover:bg-surface-2"}`}
+                className={`rounded-full px-4 py-2 text-sm ${days === r ? "bg-brand-soft font-semibold text-brand" : "text-muted hover:bg-surface-2"}`}
               >
                 {r} días
               </button>
@@ -52,7 +52,7 @@ function Stat({ label, value, hint, tone = "text-fg" }: { label: string; value: 
   return (
     <div className="card">
       <p className="text-sm text-muted">{label}</p>
-      <p className={`mt-1 text-2xl font-bold tracking-tight ${tone}`}>{value}</p>
+      <p className={`mt-1 font-display text-3xl font-medium tracking-tight ${tone}`}>{value}</p>
       {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
     </div>
   );

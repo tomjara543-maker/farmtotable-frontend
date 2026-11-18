@@ -113,7 +113,7 @@ function Settlements({ admin }: { admin: boolean }) {
         {stats.map((s) => (
           <div key={s.label} className="card">
             <p className="text-sm text-muted">{s.label}</p>
-            <p className={`mt-1 text-2xl font-bold ${s.tone}`}>{money(s.value)}</p>
+            <p className={`mt-1 font-display text-3xl font-medium ${s.tone}`}>{money(s.value)}</p>
           </div>
         ))}
       </div>

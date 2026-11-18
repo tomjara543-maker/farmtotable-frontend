@@ -9,6 +9,7 @@ import { logout, roleLabel, useAuth } from "@/lib/auth";
 import type { Role } from "@/lib/session";
 
 const links: { href: string; label: string; roles: (Role | null)[] }[] = [
+  { href: "/", label: "Inicio", roles: [null, "BUYER", "PRODUCER", "ADMIN"] },
   { href: "/catalogo", label: "Catálogo", roles: [null, "BUYER", "PRODUCER", "ADMIN"] },
   { href: "/carrito", label: "Carrito", roles: ["BUYER"] },
   { href: "/pedidos", label: "Mis pedidos", roles: ["BUYER"] },
@@ -57,7 +58,7 @@ export default function Nav() {
       <Wordmark className="mr-4 text-xl" />
       <div className="flex flex-1 flex-wrap gap-1">
         {visible.map((l) => {
-          const active = pathname.startsWith(l.href);
+          const active = l.href === "/" ? pathname === "/" : pathname.startsWith(l.href);
           return (
             <Link
               key={l.label}
