@@ -2,10 +2,11 @@
 
 import { RefreshIcon } from "@/components/landing/icons";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import RequireRole from "@/components/RequireRole";
-import { ApiError, Order, PaymentMethod, post } from "@/lib/api";
+import { api, ApiError, Order, PaymentMethod, post } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 import { dateTime, money, shortId } from "@/lib/format";
 import { orderStatus } from "@/lib/labels";
 import { useApi } from "@/lib/useApi";
@@ -133,26 +134,87 @@ function luhn(number: string) {
   return number.length >= 13 && sum % 10 === 0;
 }
 
+interface WompiConfig {
+  enabled: boolean;
+  baseUrl?: string;
+  publicKey?: string;
+  acceptancePermalink?: string;
+  personalAuthPermalink?: string;
+}
+
+async function tokenizeCard(config: WompiConfig, card: { number: string; exp: string; cvv: string; holder: string }) {
+  const [month, year] = card.exp.split("/");
+  let res: Response;
+  try {
+    res = await fetch(`${config.baseUrl}/tokens/cards`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${config.publicKey}` },
+      body: JSON.stringify({ number: card.number, cvc: card.cvv, exp_month: month, exp_year: year, card_holder: card.holder }),
+    });
+  } catch {
+    throw new Error("No se pudo conectar con la pasarela de pagos");
+  }
+  const body = (await res.json().catch(() => ({}))) as { data?: { id: string; last_four: string }; error?: { messages?: Record<string, string[]> } };
+  if (!res.ok || !body.data) {
+    const detail = body.error?.messages ? Object.values(body.error.messages).flat().join("; ") : "datos de la tarjeta inválidos";
+    throw new Error(`Pasarela de pagos: ${detail}`);
+  }
+  return body.data;
+}
+
 function PaymentForm({ order, onClose, onDone }: { order: Order; onClose: () => void; onDone: (text: string) => void }) {
   const [method, setMethod] = useState<PaymentMethod>("CARD");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [wompi, setWompi] = useState<WompiConfig>({ enabled: false });
+  const { user } = useAuth();
+
+  useEffect(() => {
+    let ignore = false;
+    api<WompiConfig>("/payments/wompi/config")
+      .then((c) => !ignore && setWompi(c))
+      .catch(() => undefined);
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     let cardLast4: string | undefined;
+    let cardToken: string | undefined;
     if (method === "CARD") {
       const number = String(data.get("card")).replace(/\D/g, "");
       if (!luhn(number)) return setError("Número de tarjeta inválido");
       if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(String(data.get("exp")))) return setError("Vencimiento inválido (MM/AA)");
       if (!/^\d{3,4}$/.test(String(data.get("cvv")))) return setError("CVV inválido");
       cardLast4 = number.slice(-4);
+      if (wompi.enabled) {
+        const holder = String(data.get("holder")).trim();
+        if (holder.length < 5) return setError("Escribe el nombre del titular tal como aparece en la tarjeta");
+        if (!data.get("terms")) return setError("Debes aceptar los términos de la pasarela");
+        setBusy(true);
+        setError(null);
+        try {
+          const token = await tokenizeCard(wompi, { number, exp: String(data.get("exp")), cvv: String(data.get("cvv")), holder });
+          cardToken = token.id;
+          cardLast4 = token.last_four;
+        } catch (err) {
+          setBusy(false);
+          return setError((err as Error).message);
+        }
+      }
     }
     setBusy(true);
     setError(null);
     try {
-      await post("/payments", { orderId: order.id, method, cardLast4 });
+      await post("/payments", {
+        orderId: order.id,
+        method,
+        cardLast4,
+        ...(cardToken ? { cardToken, customerEmail: user?.email, acceptTerms: true } : {}),
+      });
       onDone(`Pago del pedido ${shortId(order.id)} aprobado. Programaremos la entrega en la zona ${order.deliveryZone}.`);
     } catch (err) {
       const msg = (err as Error).message;
@@ -188,8 +250,29 @@ function PaymentForm({ order, onClose, onDone }: { order: Order; onClose: () => 
           <input name="card" inputMode="numeric" autoComplete="cc-number" placeholder="Número de tarjeta" className="input" required />
           <input name="exp" autoComplete="cc-exp" placeholder="MM/AA" className="input" required />
           <input name="cvv" inputMode="numeric" autoComplete="cc-csc" placeholder="CVV" className="input" required />
+          {wompi.enabled && (
+            <>
+              <input name="holder" autoComplete="cc-name" placeholder="Nombre del titular" className="input sm:col-span-3" required />
+              <label className="flex items-start gap-2 text-xs text-muted sm:col-span-3">
+                <input type="checkbox" name="terms" className="mt-0.5" />
+                <span>
+                  Acepto los{" "}
+                  <a href={wompi.acceptancePermalink} target="_blank" rel="noreferrer" className="underline">
+                    términos y condiciones
+                  </a>{" "}
+                  y la{" "}
+                  <a href={wompi.personalAuthPermalink ?? wompi.acceptancePermalink} target="_blank" rel="noreferrer" className="underline">
+                    autorización de datos personales
+                  </a>{" "}
+                  de Wompi.
+                </span>
+              </label>
+            </>
+          )}
           <p className="text-xs text-muted sm:col-span-3">
-            Pasarela simulada: prueba con 4242 4242 4242 4242 (aprobada) o 4000 0000 0000 0002 (rechazada).
+            {wompi.enabled
+              ? "Pasarela Wompi en modo de pruebas: 4242 4242 4242 4242 se aprueba y 4111 1111 1111 1111 se rechaza. Usa cualquier fecha futura y un CVC de 3 dígitos."
+              : "Pasarela simulada: prueba con 4242 4242 4242 4242 (aprobada) o 4000 0000 0000 0002 (rechazada)."}
           </p>
         </div>
       )}
