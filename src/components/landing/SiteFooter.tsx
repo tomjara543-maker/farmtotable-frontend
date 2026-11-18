@@ -78,7 +78,7 @@ export default function SiteFooter() {
 
       <div className="border-t border-forest">
         <div className="section flex flex-col gap-4 py-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} FarmToTable. Todos los derechos reservados.</p>
+          <p>© 2026 FarmToTable. Todos los derechos reservados.</p>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             <li>
               <a href="#" className="hover:text-mint">
